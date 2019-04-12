@@ -107,7 +107,11 @@ def logout():
 
 @app.route('/')
 def index():
-    return redirect('/blog')
+    sql_dict = User.query.all()
+    users = []
+    for i in sql_dict:
+        users.append(i.username)
+    return render_template('index.html', users=users)
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def new_post():
@@ -151,9 +155,18 @@ def blog():
             post_id = int(request.args.get('id'))
             current_post = Blog.query.get(post_id)
             return render_template('current.html', post=current_post)
+        if request.args.get('user'):
+            user = User.query.filter_by(username=request.args.get('user')).first()
+            posts = user.blogs
+            return render_template('user.html', posts=posts, username=user.username)
 
     posts = Blog.query.order_by(desc(Blog.date)).all()
     return render_template('blog.html', title='My Blog', posts=posts)
 
+@app.route('/test')
+def test():
+    user = User.query.filter_by(username=request.args.get('user')).first()
+    posts = user.blogs
+    return render_template('test.html', test=posts)
 if __name__ == '__main__':
     app.run()
