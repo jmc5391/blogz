@@ -2,14 +2,16 @@
 
 {% block content %}
 
+    <div class='content'>
     {% if users|length == 0 %}
     <p>No users yet!</p>
     {% else %}
-
+        
         {% for user in users %}
-                <a href ='/blog?user={{user}}'>{{user}}</p>
+                <h2><a href ='/blog?user={{user}}'>{{user}}</a><br></h2>
             {% endfor %}
-
+        
     {% endif %}
+    </div>
 
 {% endblock %}

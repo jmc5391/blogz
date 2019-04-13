@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-
+<div class='content'>
 <h2>New Post:</h2>
 <form method='POST'>
     <div>
     <label>
-        Title:
+        Title: 
         <input type="text" name='title' value='{{post_title}}' />
     </label>
     <p class='error'>{{title_error}}</p>
@@ -22,5 +22,6 @@
     <input type='submit' value='Make Post' />
     </div>
 </form>
+</div>
 
 {% endblock %}

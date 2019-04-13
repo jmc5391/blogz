@@ -1,27 +1,15 @@
-html {
-    background-color: black;
-    font-family: Arial, Helvetica, sans-serif;
-    color: white;
-}
-
-a {
-    color: darkgreen
-}
-
-p {
-    font-family: Arial, Helvetica, sans-serif;
-}
 
 .error { 
     color: red ;
     font-style: italic;
 }
 
-.login {
-    float: right;
-    text-align: right;
+.content {
+    max-width: 1000 px;
+    margin: auto;
+    width: 50%;
 }
 
-body {
-    padding: 10 px;
+.list {
+    list-style: none;
 }

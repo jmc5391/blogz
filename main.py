@@ -157,11 +157,11 @@ def blog():
             return render_template('current.html', post=current_post)
         if request.args.get('user'):
             user = User.query.filter_by(username=request.args.get('user')).first()
-            posts = user.blogs
+            posts = Blog.query.filter_by(user=user).order_by(desc(Blog.date)).all()
             return render_template('user.html', posts=posts, username=user.username)
 
     posts = Blog.query.order_by(desc(Blog.date)).all()
-    return render_template('blog.html', title='My Blog', posts=posts)
+    return render_template('blog.html', posts=posts)
 
 @app.route('/test')
 def test():

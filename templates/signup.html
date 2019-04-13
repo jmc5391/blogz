@@ -1,23 +1,43 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <div class='content'>
         <h1>Sign Up</h1>
+        <table>
         <form action='/signup' method='POST'>
-            <label>
-                Username:
-                <input type='text' name='username' value='{{username}}' />
-            </label>
+            <tr>
+                <td>
+                    <label>
+                        Username:
+                        <input type='text' name='username' value='{{username}}' />
+                    </label>
+                </td>
+            </tr>
 
-            <label>
-                Password*:
-                <input type='password' name='password' />
-            </label>
+            <tr>
+                <td>
+                    <label>
+                        Password*:
+                        <input type='password' name='password' />
+                    </label>
+                </td>
+            </tr>
 
-            <label>
-                Confirm Password*:
-                <input type='password' name='verify' />
-            </label>
+            <tr>
+                <td>
+                    <label>
+                        Confirm Password*:
+                        <input type='password' name='verify' />
+                    </label>
+                </td>
+            </tr>
 
-            <input type='submit' value='signup' />
+            <tr>
+                <td>
+                    <input type='submit' value='signup' />
+                </td>
+            </tr>
         </form>
+        </table>
+    </div>
 {% endblock %}
