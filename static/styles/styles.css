@@ -18,10 +18,5 @@ p {
 }
 
 .login {
-    float: right;
-    text-align: right;
-}
-
-body {
-    padding: 10 px;
+    float: right
 }
