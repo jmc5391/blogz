@@ -150,6 +150,8 @@ def new_post():
 @app.route('/blog', methods=['POST', 'GET'])
 def blog():
 
+    pagination = Blog.query.order_by(desc(Blog.date)).paginate(1, 5, False)
+
     if request.method == 'GET':
         if request.args.get('id'):
             post_id = int(request.args.get('id'))
@@ -159,14 +161,14 @@ def blog():
             user = User.query.filter_by(username=request.args.get('user')).first()
             posts = Blog.query.filter_by(user=user).order_by(desc(Blog.date)).all()
             return render_template('user.html', posts=posts, username=user.username)
+        if request.args.get('page'):
+            page = int(request.args.get('page'))
+            pagination = Blog.query.order_by(desc(Blog.date)).paginate(page, 5, False)
+            posts = pagination.items
+            return render_template('blog.html', posts=posts, pagination=pagination)
 
-    posts = Blog.query.order_by(desc(Blog.date)).all()
-    return render_template('blog.html', posts=posts)
+    posts = pagination.items
+    return render_template('blog.html', posts=posts, pagination=pagination)
 
-@app.route('/test')
-def test():
-    user = User.query.filter_by(username=request.args.get('user')).first()
-    posts = user.blogs
-    return render_template('test.html', test=posts)
 if __name__ == '__main__':
     app.run()

@@ -20,4 +20,15 @@
 
     {% endif %}
     </div>
+
+    <div class=pagination>
+        {%- for page in pagination.iter_pages() %}
+            {% if page == pagination.page %}
+                {{ page }}
+            {% else %}
+                <a href="{{ url_for('blog', page = page) }}">{{ page }} </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
 {% endblock %}
