@@ -111,6 +111,7 @@ def index():
     users = []
     for i in sql_dict:
         users.append(i.username)
+    users.sort(key = str.lower)
     return render_template('index.html', users=users)
 
 @app.route('/newpost', methods=['POST', 'GET'])
@@ -145,7 +146,7 @@ def new_post():
             return render_template('newpost.html', title = 'New Post', post_title = post_title, post_body = post_body,
              title_error = title_error, body_error = body_error)
 
-    return render_template('newpost.html', title = 'New Post', post_title = 'Title')
+    return render_template('newpost.html', title = 'New Post')
 
 @app.route('/blog', methods=['POST', 'GET'])
 def blog():
@@ -159,8 +160,9 @@ def blog():
             return render_template('current.html', post=current_post)
         if request.args.get('user'):
             user = User.query.filter_by(username=request.args.get('user')).first()
-            posts = Blog.query.filter_by(user=user).order_by(desc(Blog.date)).all()
-            return render_template('user.html', posts=posts, username=user.username)
+            pagination = Blog.query.filter_by(user=user).order_by(desc(Blog.date)).paginate(1, 5, False)
+            posts = pagination.items
+            return render_template('user.html', posts=posts, username=user.username, pagination = pagination)
         if request.args.get('page'):
             page = int(request.args.get('page'))
             pagination = Blog.query.order_by(desc(Blog.date)).paginate(page, 5, False)

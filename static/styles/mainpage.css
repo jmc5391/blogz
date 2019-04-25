@@ -14,8 +14,16 @@
     list-style: none;
 }
 
-.pagination {
+#pagination {
     margin: auto;
     width: 50%;
-    padding: 10 px;
+    padding-top: 10px;
+    padding-bottom: 100px;
+    font-size: xx-large;
+}
+
+#post_body {
+    resize: none;
+    width: 300%;
+    height: 200px;
 }

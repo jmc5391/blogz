@@ -21,7 +21,7 @@
     {% endif %}
     </div>
 
-    <div class=pagination>
+    <div id="pagination">
         {%- for page in pagination.iter_pages() %}
             {% if page == pagination.page %}
                 {{ page }}
