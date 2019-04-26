@@ -8,13 +8,13 @@
         Title: 
         <input type="text" name='title' value = '{{post_title}}' placeholder = 'Type your title here!' />
     </label>
-    <p class='error'>{{title_error}}</p>
+    <p id='error'>{{title_error}}</p>
     </div>
     <div>
     <label>
         <textarea id='post_body' name='body' placeholder = 'Type your post here!'>{{ post_body }}</textarea>
     </label>
-    <p class='error'>{{body_error}}</p>
+    <p id='error'>{{body_error}}</p>
     </div>
     <div>
     <input type='submit' value='Make Post' />

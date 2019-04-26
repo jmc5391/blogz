@@ -2,6 +2,7 @@ from flask import Flask, request, redirect, render_template, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from datetime import datetime
+from hashutils import make_pw_hash, check_pw_hash
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -31,19 +32,19 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(16))
+    pw_hash = db.Column(db.String(120))
     blogs = db.relationship('Blog', backref='user')
 
     def __init__(self, username, password):
 
         self.username = username
-        self.password = password
+        self.pw_hash = make_pw_hash(password)
 
 @app.before_request
 def require_login():
     allowed_routes = ['login', 'signup', 'logout', 'blog', '/']
     if request.endpoint not in allowed_routes and 'username' not in session:
-        flash('Please log in to view this page.')
+        flash('Please log in to view this page.', 'error')
         return redirect('/login')
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -53,15 +54,15 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if user and user.password == password:
+        if user and check_pw_hash(password, user.pw_hash):
             session['username'] = username
             flash('Logged in!')
             return redirect('/newpost')
         elif not user:
-            flash('User does not exist.')
+            flash('User does not exist.', 'error')
             return render_template('login.html', username=username)
-        elif user.password != password:
-            flash('Incorrect password.')
+        elif check_pw_hash(password, user.pw_hash) == False:
+            flash('Incorrect password.', 'error')
             return render_template('login.html', username=username)
 
     return render_template('login.html')
@@ -74,16 +75,16 @@ def signup():
         password = request.form['password']
         verify = request.form['verify']
         if not username or ' ' in username or len(username) < 3 or len(username) > 120:
-            flash('Please enter a valid username.')
+            flash('Please enter a valid username.', 'error')
             return render_template('signup.html', username = username)
         elif not password or len(password) > 16 or len(password) < 3 or ' ' in password:
-            flash('Please enter a valid password.')
+            flash('Please enter a valid password.', 'error')
             return render_template('signup.html', username = username)
         elif not verify:
-            flash('Please re-enter the password.')
+            flash('Please re-enter the password.', 'error')
             return render_template('signup.html', username = username)
         elif verify != password:
-            flash('Please re-enter the password correctly.')
+            flash('Please re-enter the password correctly.', 'error')
             return render_template('signup.html', username = username)
         else:
             existing_user = User.query.filter_by(username=username).first()
@@ -95,7 +96,7 @@ def signup():
                 flash('Username created!')
                 return redirect('/newpost')
             else:
-                flash('User already exists!')
+                flash('User already exists!', 'error')
                 return redirect('/signup')
 
     return render_template('signup.html')
